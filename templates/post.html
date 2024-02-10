@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="col-6 mx-auto">
+    <div class="card my-3">
+      <div class="card-body">
+        <h3 class="card-title">{{ post.title }}</h3>
+        <h5>Описание</h5>
+        <p class="card-text">{{ post.content }}</p>
+        <h5>Правила</h5>
+        <p class="card-text">С правилами игры можно ознакомиться <a href="{{post.rules}}">тут</a>.</p>
+        <p class="card-text">
+          Категория: <a href="{{ url_for('category', category_id=post.category.id) }}">{{ post.category.name }}</a>
+          | Теги: {% for tag in post.tags %}
+                  <a href="{{ url_for('tag', tag_id=tag.id) }}">{{ tag.name }}</a> 
+                 {% endfor %}
+        </p>
+      </div>
+    </div>
+</div>
+{% endblock %}

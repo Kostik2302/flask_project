@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Все записи с тегом "{{ tag.name }}"</h1>
+  <div class="col-6 mx-auto">
+  {% for post in posts %}
+    <div class="card my-3">
+      <div class="card-body">
+        <h5 class="card-title">{{ post.title }}</h5>
+        <p class="card-text">{{ post.content[:300] }}... <a href="{{ url_for('post', post_id=post.id) }}" class="text-decoration-none">Читать</a></p>
+        <p class="card-text">
+          Категория: <a href="{{ url_for('category', category_id=post.category.id) }}">{{ post.category.name }}</a>
+          | Теги: {% for tag in post.tags %}
+                  <a href="{{ url_for('tag', tag_id=tag.id) }}">{{ tag.name }}</a> 
+                 {% endfor %}
+        </p>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}
