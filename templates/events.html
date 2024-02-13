@@ -4,37 +4,46 @@
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h1>Все записи</h1>
   </div>
+  <button onclick="window.location.href = 'events/new_event';" class="btn btn-primary">Предложить мероприятие</button>
   <div class="col-6 mx-auto">
   {% for event in events %}
-    <div class="card my-3">
-      <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center">
-          <h5 class="card-title">{{ event.name }}</h5>
-          <div class="d-flex">
-            {% if event.id in user_events %}
-              <form action="/events/delete" method="POST">
-                <input type="hidden" name="event_id_to_delete" value="{{ event.id }}">
-                <button type="submit" onclick="return confirm('Вы уверены?')" class="btn btn-danger">Отписаться</button>
-              </form>
-            {% elif events_members.count(event.id) == event.members_max %}
-              <p>Запись невозможна</p>
-            {% else %}
-              <form action="/events/add" method="POST">
-                <input type="hidden" name="event_id_to_add" value="{{ event.id }}">
-                <button type="submit" onclick="return confirm('Вы уверены?')", class="btn btn-primary">Записаться</button>
-              </form>
-            {% endif %}
+    {% if event.status == True %}
+      <div class="card my-3">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title">{{ event.name }}</h5>
+            <div class="d-flex">
+              {% if event.id in user_events %}
+                <form action="/events/delete" method="POST">
+                  <input type="hidden" name="event_id_to_delete" value="{{ event.id }}">
+                  <button type="submit" onclick="return confirm('Вы уверены?')" class="btn btn-danger">Отписаться</button>
+                </form>
+              {% elif events_members.count(event.id) == event.members_max %}
+                <p>Запись невозможна</p>
+              {% else %}
+                <form action="/events/add" method="POST">
+                  <input type="hidden" name="event_id_to_add" value="{{ event.id }}">
+                  <button type="submit" onclick="return confirm('Вы уверены?')", class="btn btn-primary">Записаться</button>
+                </form>
+              {% endif %}
+              {% if current_user.login == 'Kostik_number_1' %}
+                <form action="/events/confirm/delete" method="POST">
+                  <input type="hidden" name="event_to_delete" value="{{ event.id }}">
+                  <button type="submit" onclick="return confirm('Вы уверены?')" class="btn btn-danger">Удалить</button>
+                </form>
+              {% endif %}
+            </div>
           </div>
-        </div>
-        <a href="{{ url_for('post', post_id=event.game_id) }}" class="text-decoration-none">{{ event.post.title }}</a>
-        <p class="card-text">Дата и время: {{ event.date }}</p>
-        <p class="card-text">Место проведения: {{ event.place }}</p>
-        <p class="card-text">Описание: {{ event.description }}</p>
-        <p class="card-text">Участников: {{ events_members.count(event.id) }} / {{ event.members_max }}</p>
+          <a href="{{ url_for('post', post_id=event.game_id) }}" class="text-decoration-none">{{ event.post.title }}</a>
+          <p class="card-text">Дата и время: {{ event.date }}</p>
+          <p class="card-text">Место проведения: {{ event.place }}</p>
+          <p class="card-text">Описание: {{ event.description }}</p>
+          <p class="card-text">Участников: {{ events_members.count(event.id) }} / {{ event.members_max }}</p>
 
-        </p>
+          </p>
+        </div>
       </div>
-    </div>
+    {% endif %}
   {% endfor %}
 </div>
 {% endblock %}

@@ -35,3 +35,4 @@ function updateSlider() {
 
 // Инициализация слайдера
 updateSlider();
+

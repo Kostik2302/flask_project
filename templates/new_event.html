@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h1>Предложить мероприятие</h1>
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+          <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post" action="{{ url_for('new_event') }}">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Название:</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="game">Выберите игру: </label>
+                            <select id="game" name="game">
+                                {% for game in games %}
+                        
+                                    <option value="{{ game.id }}">{{ game.title }}</option>
+                        
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="datetimepicker">Выберите дату и время: </label>
+                            <input type="datetime-local" id="date_time" name="date_time">
+                        </div>
+                        <div class="mb-3">
+                            <label for="weight" class="form-label">Место проведения:</label>
+                            <input type="text" class="form-control" id="location" name="location" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="details" class="form-label">Описание:</label>
+                            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="weight" class="form-label">Максимальное количество участников:</label>
+                            <input type="text" class="form-control" id="max_members" name="max_members" required>
+                        </div>
+                        <button onclick="window.location.href = '/events';" class="btn btn-primary">Назад</button>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}

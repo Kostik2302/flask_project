@@ -129,7 +129,52 @@ def sign_up():
     db.session.commit()
     return redirect('/events')
 
+@app.route('/events/new_event', methods=['GET', 'POST'])
+def new_event():
+    if request.method == 'POST':
+        name = request.form['name']
+        game = request.form['game']
+        date_time = datetime.strptime(request.form['date_time'], '%Y-%m-%dT%H:%M')
+        location = request.form['location']
+        members_max = request.form['max_members']
+        description = request.form['description']
+        event = Event(name=name, game_id=game, date=date_time, place=location, members_max=members_max, description=description, status=False)
+        db.session.add(event)
+        db.session.commit()
+        return redirect('/events')
+    games = Post.alphabet_sort().all()
+    return render_template('new_event.html', games = games)
 
 
+@app.route('/events/confirm')
+@login_required
+def events_confirm():
+    if current_user.login == 'Kostik_number_1':
+        events_to_confirm_count = Event.query.filter(Event.status == False).count()
+        events = Event.latest_first().all()
+        datetime_now = datetime.now()
+        for event in events:
+            if event.date < datetime_now:
+                db.session.delete(event)
+        return render_template('events_to_confirm.html', events=events, events_to_confirm_count=events_to_confirm_count)
+    else:
+        return redirect('/events')
+    
+@app.route('/events/confirm/delete', methods=['POST'])
+def unconfirn_event():
+    event_to_delete = request.form.get('event_to_delete')
+    db.session.query(Event).filter(Event.id == event_to_delete).delete()
+    db.session.commit()
+    return redirect('/events/confirm')
 
+@app.route('/events/confirm/add', methods=['POST'])
+def confirm_event():
+    event_to_add = db.session.query(Event).filter(Event.id == request.form.get('event_to_add')).first()
+    event_to_add.status = True
+    db.session.commit()
+    return redirect('/events/confirm')
+
+        
+        
+        
 

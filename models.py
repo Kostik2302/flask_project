@@ -42,6 +42,7 @@ class Post(db.Model):
     @classmethod
     def alphabet_sort(cls):
         return cls.query.order_by(cls.title.asc())
+    
 
 
 class Event(db.Model):
@@ -52,6 +53,7 @@ class Event(db.Model):
     place = db.Column(db.String(100), nullable=False)
     members_max = db.Column(db.Integer, nullable=False)
     description = db.Column(db.Text, nullable=True)
+    status = db.Column(db.Boolean, default=True)
     events_id = db.relationship('Event_members', backref='event', lazy=True)
 
     @classmethod
