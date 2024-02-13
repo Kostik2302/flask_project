@@ -10,11 +10,28 @@
       <div class="card-body">
         <div class="d-flex justify-content-between align-items-center">
           <h5 class="card-title">{{ event.name }}</h5>
+          <div class="d-flex">
+            {% if event.id in user_events %}
+              <form action="/events/delete" method="POST">
+                <input type="hidden" name="event_id_to_delete" value="{{ event.id }}">
+                <button type="submit" onclick="return confirm('Вы уверены?')" class="btn btn-danger">Отписаться</button>
+              </form>
+            {% elif events_members.count(event.id) == event.members_max %}
+              <p>Запись невозможна</p>
+            {% else %}
+              <form action="/events/add" method="POST">
+                <input type="hidden" name="event_id_to_add" value="{{ event.id }}">
+                <button type="submit" onclick="return confirm('Вы уверены?')", class="btn btn-primary">Записаться</button>
+              </form>
+            {% endif %}
+          </div>
         </div>
         <a href="{{ url_for('post', post_id=event.game_id) }}" class="text-decoration-none">{{ event.post.title }}</a>
         <p class="card-text">Дата и время: {{ event.date }}</p>
         <p class="card-text">Место проведения: {{ event.place }}</p>
         <p class="card-text">Описание: {{ event.description }}</p>
+        <p class="card-text">Участников: {{ events_members.count(event.id) }} / {{ event.members_max }}</p>
+
         </p>
       </div>
     </div>
